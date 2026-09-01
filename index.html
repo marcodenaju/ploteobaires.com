@@ -143,6 +143,54 @@
     .portfolio-grid { grid-template-columns: 1fr; }
   }
 
+  .portfolio-grid img {
+    cursor: zoom-in;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+
+  /* ---------- Lightbox ---------- */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 0, 63, 0.92);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    z-index: 999;
+  }
+
+  .lightbox.abierto {
+    display: flex;
+  }
+
+  .lightbox img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    user-select: none;
+    -webkit-user-drag: none;
+    pointer-events: none;
+  }
+
+  .lightbox-cerrar {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    background: none;
+    border: none;
+    color: var(--blanco);
+    font-size: 2rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0.5rem;
+  }
+
+  .lightbox-cerrar:hover {
+    opacity: 0.75;
+  }
+
   /* ---------- Info ---------- */
   .info {
     background: var(--azul-suave);
@@ -263,10 +311,10 @@
   <div class="portfolio-inner">
     <h2>Portfolio</h2>
     <div class="portfolio-grid">
-      <img src="https://raw.githubusercontent.com/marcodenaju/PloteoBaires/main/img/DSC_7532.jpg" alt="Trabajo de ploteo 1">
-      <img src="https://raw.githubusercontent.com/marcodenaju/PloteoBaires/main/img/DSC_7537.jpg" alt="Trabajo de ploteo 2">
-      <img src="https://raw.githubusercontent.com/marcodenaju/PloteoBaires/main/img/DSC_7655.jpg" alt="Trabajo de ploteo 3">
-      <img src="https://raw.githubusercontent.com/marcodenaju/PloteoBaires/main/img/_DSC1143.jpg" alt="Trabajo de ploteo 4">
+      <img src="https://raw.githubusercontent.com/marcodenaju/PloteoBaires/main/img/DSC_7532.jpg" alt="Trabajo de ploteo 1" draggable="false" oncontextmenu="return false">
+      <img src="https://raw.githubusercontent.com/marcodenaju/PloteoBaires/main/img/DSC_7537.jpg" alt="Trabajo de ploteo 2" draggable="false" oncontextmenu="return false">
+      <img src="https://raw.githubusercontent.com/marcodenaju/PloteoBaires/main/img/DSC_7655.jpg" alt="Trabajo de ploteo 3" draggable="false" oncontextmenu="return false">
+      <img src="https://raw.githubusercontent.com/marcodenaju/PloteoBaires/main/img/_DSC1143.jpg" alt="Trabajo de ploteo 4" draggable="false" oncontextmenu="return false">
     </div>
   </div>
 </section>
@@ -305,6 +353,37 @@
 </section>
 
 <footer>Ploteo Baires · Soporte visual</footer>
+
+<div class="lightbox" id="lightbox" oncontextmenu="return false">
+  <button class="lightbox-cerrar" aria-label="Cerrar" onclick="cerrarLightbox()">&times;</button>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<script>
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
+
+  document.querySelectorAll('.portfolio-grid img').forEach(img => {
+    img.addEventListener('click', () => {
+      lightboxImg.src = img.src;
+      lightboxImg.alt = img.alt;
+      lightbox.classList.add('abierto');
+    });
+  });
+
+  function cerrarLightbox() {
+    lightbox.classList.remove('abierto');
+    lightboxImg.src = '';
+  }
+
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) cerrarLightbox();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') cerrarLightbox();
+  });
+</script>
 
 </body>
 </html>
